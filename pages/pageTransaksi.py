@@ -11,10 +11,10 @@ class PageTransaksi(QHBoxLayout):
     def __init__(self):
         super().__init__()
 
-        self.setVerticalSpacing(50)
-        self.createTable()
-        self.createInput()
-        self.showData()
+        # self.setVerticalSpacing(50)
+        # self.createTable()
+        # self.createInput()
+        # self.showData()
 
     def showData(self):
         pass
