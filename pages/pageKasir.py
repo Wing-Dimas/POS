@@ -123,8 +123,6 @@ class PageKasir(QGridLayout):
         
         # tambah keranjang
         self.tambahKeranjang(barang, qty)
-        
-        print(self.keranjang)
 
     def tambahKeranjang(self, barang, qty):
         # cek over qty

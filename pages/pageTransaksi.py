@@ -14,13 +14,11 @@ import calendar
 class PageTransaksi(QHBoxLayout):
     def __init__(self):
         super().__init__()
-        
+    
         self.createLeft()
         self.createRight()
         self.addLayout(self.leftLayout)
         self.addLayout(self.rightLayout)
-        
-
     
     def createLeft(self):
         self.leftLayout = QGridLayout()
@@ -44,15 +42,17 @@ class PageTransaksi(QHBoxLayout):
 
     def createRight(self):
         self.rightLayout = QGridLayout()
+        self.sc = MplCanvas(self, width=7, height=4, dpi=100)
+        self.sc.axes.set_title("Grafik Penjualan barang mingguan")
         self.createGraphic()
-
+        self.rightLayout.addWidget(self.sc)
 
     def showData(self, importFile=False):
         self.table.clearContents()
         if not importFile:
             self.data = query("""
                 SELECT 
-                    DATE(transaksi.tanggal) AS tanggal,
+                    DATE(transaksi.tanggal) AS tanggal, 
                     barang.nama_barang,
                     SUM(detail_pemesanan.qty) AS qty,
                     barang.harga_jual,
@@ -96,8 +96,7 @@ class PageTransaksi(QHBoxLayout):
         self.leftLayout.addWidget(self.table, 1, 0)
 
     def createGraphic(self):
-        print(self.data)
-        y = [
+        self.y = [
             0, # senin
             0, # selasa
             0, # rabu
@@ -106,20 +105,19 @@ class PageTransaksi(QHBoxLayout):
             0, # sabtu
             0, # minggu
         ]
-        
+
         for i in range(self.data.shape[0]): 
             day = int(self.data.iloc[i].Tanggal.strftime("%w"))  - 1 
-            y[day] += int(self.data.iloc[i].Qty)
+            self.y[day] += int(self.data.iloc[i].Qty)
 
-
-        sc = MplCanvas(self, width=7, height=4, dpi=100)
-        sc.axes.bar(["senin","selasa","rabu","kamis","juma'at", "sabtu", "minggu"], y)
-        self.rightLayout.addWidget(sc, 0, 0)
+        self.sc.axes.cla() # Clear the canvas
+        self.sc.axes.bar(["senin","selasa","rabu","kamis","juma'at", "sabtu", "minggu"], self.y)
+        # Trigger the canvas to update and redraw.
+        self.sc.draw()
     
     def refresh(self):
-        self.showData(importFile=False)
+        self.showData()
         self.createGraphic()
-        self.createRight()
 
     def importFile(self):
         window = QWidget()
@@ -131,7 +129,6 @@ class PageTransaksi(QHBoxLayout):
         self.data = data
         self.showData(importFile=True)
         self.createGraphic()
-        self.createRight()
     
     def exportFile(self):
         date = datetime.now()

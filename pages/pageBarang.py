@@ -98,7 +98,6 @@ class PageBarang(QGridLayout):
         nama = self.inpNama.text()
         hargaBeli = self.inpHragaBeli.text()
         hargaJual = self.inpHargaJual.text()
-        print("test")
         
         statement(f"INSERT INTO `barang` (`id_barang`, `nama_barang`, `harga_beli`, `harga_jual`) VALUES (NULL, '{nama}', '{int(hargaBeli)}', '{int(hargaJual)}');")
         self.showData()
