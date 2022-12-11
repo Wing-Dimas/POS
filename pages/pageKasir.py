@@ -204,8 +204,6 @@ class PageKasir(QGridLayout):
         msg.setText("Transaksi berhasil")
         msg.exec()
 
-        self.reset()
-
 
     def reset(self):
         self.keranjang = []
