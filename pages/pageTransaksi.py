@@ -66,7 +66,7 @@ class PageTransaksi(QHBoxLayout):
                 JOIN barang
                     ON detail_pemesanan.id_barang=barang.id_barang
                 GROUP BY DATE(transaksi.tanggal) ,barang.nama_barang
-                HAVING tanggal >= NOW() - INTERVAL WEEKDAY(now()) DAY 
+                HAVING tanggal >= NOW() - INTERVAL WEEKDAY(now()) DAY - INTERVAL 1 DAY
                     AND tanggal < NOW() + INTERVAL (7 - WEEKDAY(now())) DAY;
             """)
         self.data = pd.DataFrame(data=self.data, columns=["Tanggal", "Nama Barang", "Qty", "Harga Jual", "Harga Beli", "Laba"])
